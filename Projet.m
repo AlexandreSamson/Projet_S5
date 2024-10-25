@@ -1,4 +1,3 @@
-%SM-2
 clc; close all; clear all;
 
 %Variables
@@ -32,6 +31,10 @@ N = N1*N3/N2*N4;
 Gsm_num_SM_2   = [5*N*nm*kt*g*rarm];
 Gsm_den_s3_SM_2 = 7*L*(nm*kt*km+Bm*Rm+(N^2)*Bc*Rm);
 Gsm_den_s4_SM_2 = 7*L*Rm*(Jm+(N^2)*Jc);
+
+%% SM-2
+Eq_diff_coeff_oc = (Bm*Rm+Bc*N^2*Rm+nm*kt*km)/(Rm*(Jm+Jc*N^2));
+Eq_diff_coeff_Vm = (N*nm*kt/(Rm*Jm+Rm*Jc*N^2));
 
 %% SM-5
 kbb = 5*g*rarm/(L*7);
