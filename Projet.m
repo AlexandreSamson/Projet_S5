@@ -33,11 +33,12 @@ Gsm_den_s3_SM_2 = 7*L*(nm*kt*km+Bm*Rm+(N^2)*Bc*Rm);
 Gsm_den_s4_SM_2 = 7*L*Rm*(Jm+(N^2)*Jc);
 
 %% SM-2
+kbb = 5*g*rarm/(L*7);
 Eq_diff_coeff_oc = (Bm*Rm+Bc*N^2*Rm+nm*kt*km)/(Rm*(Jm+Jc*N^2));
 Eq_diff_coeff_Vm = (N*nm*kt/(Rm*Jm+Rm*Jc*N^2));
 
 %% SM-5
-kbb = 5*g*rarm/(L*7);
+
 Coef_A = -(((Bm*Rm)+(Bc*N^2*Rm)+(nm*kt*km))/(Rm*(Jm+Jc*N^2)));
 Lm = 0.1; %?????????????
 
