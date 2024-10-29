@@ -7,10 +7,11 @@ load("data_1v_4-09_100hz.mat", "Vm", "servo", "tsimu", "omega_c")
 % X_entree1 (X1) = u(t)
 X1 = Vm;
 
-% X_sortie1 (X2) = dy(t)/dt donc la dérivée de la position -> omega_c
-X2  = omega_c;
+% % X_sortie1 (X2) = dy(t)/dt donc la dérivée de la position -> omega_c
+% X2  = omega_c;
 % Sinon, on peut changer omega_c par la dérivée de servo
-
+% Donc prendre : X2 = diff(servo)./diff(tsimu);
+X2 = diff(servo)./diff(tsimu);
 
 % Ordre 1, seulement une dérivée
 X = [X1(1:end-1) X2];
@@ -25,10 +26,10 @@ Rinv = inv(R);
 A = Rinv*P;
 
 K = A(1);
-tau = A(2);
+tau = -A(2); % Verifier le signe de Tau
 % Parti (d) 
 Jeq = 0.0017728; % unité : kg m^2 
-Rm = tau/Jeq;
+Rm = tau/Jeq; % unité : ohms 
 
 nm = 0.69;
 km = 0.0076776; % unité : Nm/A
@@ -41,12 +42,47 @@ Beq = (1-nm*km*kt)/Rm;
 % Point (c) de SC-1. Valeur dans la section plus haut (tau et K);
 num = K;
 den = [tau 1];
+FT = tf(num, den); 
+[y_des, x_des] = lsim(FT, Vm,tsimu);
 
-FT = tf(num, den);
+y_mes = servo; % yn : c'est theta_c. C'est la valeur mesurée (_mes)
+
+E_squared = sum((y_des - y_mes).^2); 
+N = length(tsimu);
+RMSE = sqrt(1/N*E_squared);
+
+figure
+plot(tsimu, y_des)
+hold on;
+plot(tsimu, servo)
+title("Moindre carrés vs Mesuré")
+legend('Moindres carrés', 'Données expérimentales')
+xlabel('Temps (secondes)')
+ylabel('Angle (theta_c)')
 
 
+%% SC-3 Reponse de la fct transfert Gcm(s) à l'échelon Vm
 
+Gcm_num = [K];
+Gcm_den = [Rm*Jeq (Rm*Beq + nm*kt*km) 0];
+Gcm = tf(Gcm_num, Gcm_den);
 
+% Reponses a echelon 
+[yGcm, xGcm] = lsim(Gcm, Vm, tsimu);
+
+% Graphique des reponses a Vm 
+figure
+plot(xGcm, yGcm)
+hold on; 
+plot(tsimu, servo)
+title("Comparaison des systèmes")
+legend('Gcm', 'Données expérimentales')
+xlabel('Temps (secondes)')
+ylabel('Angle (theta_c)')
+% 
+% %% Why not 
+% figure
+% rlocus(Gcm)
 
 
 
