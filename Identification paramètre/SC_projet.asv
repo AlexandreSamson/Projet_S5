@@ -26,7 +26,7 @@ Rinv = inv(R);
 A = Rinv*P;
 
 K = A(1);
-tau = -A(2); % Verifier le signe de Tau
+tau = A(2); % Verifier le signe de Tau
 % Parti (d) 
 Jeq = 0.0017728; % unité : kg m^2 
 Rm = tau/Jeq; % unité : ohms 
@@ -41,7 +41,7 @@ Beq = (1-nm*km*kt)/Rm;
 % Fonction de transfert à partir de valeur de lissage par moindre carrés 
 % Point (c) de SC-1. Valeur dans la section plus haut (tau et K);
 num = K;
-den = [tau 1];
+den = [-tau 1]; % tau ici est négatif voir Revue 2 section 3.1.4
 FT = tf(num, den); 
 [y_des, x_des] = lsim(FT, Vm,tsimu);
 
@@ -65,7 +65,7 @@ ylabel('Angle (theta_c)')
 
 %% SC-3 Reponse de la fct transfert Gcm(s) à l'échelon Vm
 
-Gcm_num = [K];
+Gcm_num = [K]; % Le signe doit il être négatif ?
 Gcm_den = [Rm*Jeq (Rm*Beq + nm*kt*km) 0];
 Gcm = tf(Gcm_num, Gcm_den);
 
@@ -74,7 +74,7 @@ Gcm = tf(Gcm_num, Gcm_den);
 
 % Graphique des reponses a Vm 
 figure
-plot(xGcm, yGcm)
+plot(xGcm, abs(yGcm)) % Ici malgré le fait que K soit négatif, comme on représente un angle -> Pertinent de l'avoir en Absolue (?)
 hold on; 
 plot(tsimu, servo)
 title("Comparaison des systèmes")
