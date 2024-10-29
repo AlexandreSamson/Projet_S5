@@ -1,4 +1,5 @@
 clc; close all; clear all;
+load("data_1v_4-09_100hz.mat", "Vm", "servo", "tsimu", "omega_c")
 
 %Variables
 ms  = 0.064;
@@ -14,8 +15,8 @@ ng  = 0.9;
 Kg  = 70;
 rarm= 0.0254;
 L   = 0.4254;
-Rm  = 3; %A etre identifié
-Beq = 1; %A etre identifié
+Rm  = 1852.55; %A etre identifié
+Beq = 0.000539774; %A etre identifié
 
 %Variables pas clair qu'on doit verifier
 Jc = Jeq; %fr?
@@ -27,24 +28,29 @@ N3 = 3; %??
 N4 = 4; %??
 N = N1*N3/N2*N4;
 
+%% SM-2
 %FTBO de la position (x) selon la tension en entree (Vm) - systeme complet
 % x/Vm
 Gsm_num_SM_2   = [5*N*nm*kt*g*rarm];
 Gsm_den_s3_SM_2 = 7*L*(nm*kt*km+Bm*Rm+(N^2)*Bc*Rm);
 Gsm_den_s4_SM_2 = 7*L*Rm*(Jm+(N^2)*Jc);
 
-
-%% SM-2
+% Valeur pour SimuLink
 kbb = (5*g*rarm)/(L*7);
 Eq_diff_coeff_oc = (Bm*Rm+Bc*N^2*Rm+nm*kt*km)/(Rm*(Jm+Jc*N^2));
 Eq_diff_coeff_Vm = (N*nm*kt/(Rm*Jm+Rm*Jc*N^2));
 
+%% SM-3
+K_SM_3 = N*nm*kt;
+Gcm_den_s0_SM_3 = 1/(Rm*Bm + Bc*N.^2*Rm + nm*kt*km);
+Gcm_den_s1_SM_3 = 1/(Rm*(Jm+Jc*N.^2));
 
 %% SM-5
 % B)
 Coef_A = -(((Bm*Rm)+(Bc*N^2*Rm)+(nm*kt*km))/(Rm*(Jm+Jc*N^2)));
 Lm = 0.1; %?????????????
 
+% Non-linéaire
 A = [0 1 0 0 0;
      0 0 kbb 0 0;
      0 0 0 1 0;
