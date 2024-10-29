@@ -5,19 +5,19 @@ close all;
 load("data_1v_4-09_100hz.mat", "Vm", "servo", "tsimu", "omega_c")
 
 % X_entree1 (X1) = u(t)
-X1 = Vm;
+X1 = Vm(2:end-1);
 
 % % X_sortie1 (X2) = dy(t)/dt donc la dérivée de la position -> omega_c
 % X2  = omega_c;
 % Sinon, on peut changer omega_c par la dérivée de servo
 % Donc prendre : X2 = diff(servo)./diff(tsimu);
-X2 = diff(servo)./diff(tsimu);
+X2 = diff(omega_c)./diff(tsimu(1:end-1));
 
 % Ordre 1, seulement une dérivée
-X = [X1(1:end-1) X2];
+X = [X1 X2];
 
 % Y = y(t) donc les valeur d'angle directement -> theta_c
-Y = servo(1:end-1); 
+Y = omega_c(1:end-1); 
                                     %----Méthode des moindres carrés----%
 R = X' * X;
 P = X' * Y;
@@ -83,10 +83,11 @@ xlabel('Temps (secondes)')
 ylabel('Angle (theta_c)')
 
 
-% POUR VOIR ALLURE DE LA FONCTION DE TRANSFERT
-% Decommenter les 2 prochaines lignes
-% figure
-% rlocus(Gcm) % Allure non stable 
+%% SI-1 
+figure
+rlocus(Gcm) % Allure non stable 
+figure
+rlocus(FT)
 
 
 

@@ -83,10 +83,11 @@ xlabel('Temps (secondes)')
 ylabel('Angle (theta_c)')
 
 
-% POUR VOIR ALLURE DE LA FONCTION DE TRANSFERT
-% Decommenter les 2 prochaines lignes
-% figure
-% rlocus(Gcm) % Allure non stable 
+%% SI-1 
+figure
+rlocus(Gcm) % Allure non stable 
+figure
+rlocus(FT)
 
 
 
