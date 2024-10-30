@@ -1,8 +1,5 @@
 %% SC1 
-clear all; 
-clc;
-close all; 
-load("data_1v_4-09_100hz.mat", "Vm", "servo", "tsimu", "omega_c")
+clear all; clc;close all;load("data_1v_4-09_100hz.mat", "Vm", "servo", "tsimu", "omega_c");
 
 % X_entree1 (X1) = u(t)
 X1 = Vm;
@@ -37,7 +34,6 @@ kt = 0.007683; % unité : V / (rad/s)
 Beq = (1-nm*km*kt)/Rm;
 
 %% SC-2 R^2 et erreur RMS
-
 % Fonction de transfert à partir de valeur de lissage par moindre carrés 
 % Point (c) de SC-1. Valeur dans la section plus haut (tau et K);
 num = K;

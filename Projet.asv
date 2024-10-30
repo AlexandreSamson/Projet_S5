@@ -76,3 +76,6 @@ Gsm_SM_7 = tf(Gsm_num_SM_7, Gsm_den_SM_7);
 
 p_Gsm_SM_7 = roots(Gsm_den_SM_7); %poles de la FTBO
 
+figure
+rlocus()
+

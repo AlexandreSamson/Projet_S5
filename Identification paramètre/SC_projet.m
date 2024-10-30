@@ -1,23 +1,20 @@
 %% SC1 
-clear all; 
-clc;
-close all; 
-load("data_1v_4-09_100hz.mat", "Vm", "servo", "tsimu", "omega_c")
+clear all; clc;close all;load("data_1v_4-09_100hz.mat", "Vm", "servo", "omega_c", "tsimu");
 
 % X_entree1 (X1) = u(t)
-X1 = Vm(2:end-1);
+X1 = Vm;
 
 % % X_sortie1 (X2) = dy(t)/dt donc la dérivée de la position -> omega_c
-% X2  = omega_c;
+%X2  = omega_c;
 % Sinon, on peut changer omega_c par la dérivée de servo
 % Donc prendre : X2 = diff(servo)./diff(tsimu);
-X2 = diff(omega_c)./diff(tsimu(1:end-1));
+X2 = diff(servo)./diff(tsimu);
 
 % Ordre 1, seulement une dérivée
-X = [X1 X2];
+X = [X1(1:end-1) X2];
 
 % Y = y(t) donc les valeur d'angle directement -> theta_c
-Y = omega_c(1:end-1); 
+Y = servo(1:end-1); 
                                     %----Méthode des moindres carrés----%
 R = X' * X;
 P = X' * Y;
@@ -37,12 +34,11 @@ kt = 0.007683; % unité : V / (rad/s)
 Beq = (1-nm*km*kt)/Rm;
 
 %% SC-2 R^2 et erreur RMS
-
 % Fonction de transfert à partir de valeur de lissage par moindre carrés 
 % Point (c) de SC-1. Valeur dans la section plus haut (tau et K);
 num = K;
 den = [-tau 1]; % tau ici est négatif voir Revue 2 section 3.1.4
-FT = tf(num, den); 
+FT = tf(num, den); % des moindres carrés 
 [y_des, x_des] = lsim(FT, Vm,tsimu);
 
 y_mes = servo; % yn : c'est theta_c. C'est la valeur mesurée (_mes)
