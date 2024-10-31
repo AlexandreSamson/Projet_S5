@@ -1,4 +1,6 @@
 clc; close all; clear all;
+load("data_1v_4-09_100hz.mat", "Vm", "servo", "omega_c", "tsimu");
+
 
 %Variables
 ms  = 0.064;
@@ -9,13 +11,13 @@ km  = 0.0076776;
 kt  = 0.0076830;
 nm  = 0.69;
 Jm  = 3.9001e-7;
-Jeq = 0.0017728;
+Jeq = 0.0017728; % Jeq = Jm + N^2*Jc
 ng  = 0.9;
 Kg  = 70;
 rarm= 0.0254;
 L   = 0.4254;
-Rm  = 1852.55; %A revoir
-Beq = 0.000539774; %A revoir
+Rm  = 1852.55; %A revoir  
+Beq = 0.000539774; %A revoir    Beq = Bm+N^2*Bc
 N = ng*Kg;
 
 %FTBO de la position (x) selon la tension en entree (Vm)
@@ -24,9 +26,18 @@ Gsm_den_s3_SM_2 = 7*L*(nm*kt*km+Rm*Beq);
 Gsm_den_s4_SM_2 = 7*L*Rm*Jeq;
 
 %% SM-2
+% Valeur pour Simulink - FTBO_Eq_diff_Vm_oc.slx
 kbb = 5*g*rarm/(L*7);
 Eq_diff_coeff_oc = (Beq*Rm+nm*kt*km)/(Rm*(Jeq));
 Eq_diff_coeff_Vm = (N*nm*kt/(Rm*Jeq));
+
+%% SM-3
+%Valeur pour Simulink - Gcm.slx - Gsc.slx
+K_SM_3 = N*nm*kt;
+Gcm_den_s0_SM_3 = 1/(Rm*Beq + nm*kt*km);
+Gcm_den_s1_SM_3 = 1/(Rm*Jeq);
+Time_Vm = [tsimu Vm];
+Time_servo = [tsimu servo];
 
 %% SM-5
 % Matrice 4x4 sans la variable d'etat im 
@@ -69,7 +80,7 @@ p_Gsc_SM_6 = roots(Gsc_den_SM_6); %poles de la FTBO
 
 %% SM-7
 % FTBO de la tension en entrée (Vm) et de la position de la charge en
-% sortie (x)
+% sortie (x) et utilise les valeurs FT dans FTBO_Vm_oc
 Gsm_num_SM_7 = Gsm_num_SM_2;
 Gsm_den_SM_7 = [Gsm_den_s4_SM_2 Gsm_den_s3_SM_2 0 0 0];
 Gsm_SM_7 = tf(Gsm_num_SM_7, Gsm_den_SM_7);
