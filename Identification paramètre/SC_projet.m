@@ -1,6 +1,21 @@
 %% SC1 
 clear all; clc;close all;load("data_1v_4-09_100hz.mat", "Vm", "servo", "omega_c", "tsimu");
 
+% Lissage par projection orthogonal 
+A_moy = mean(deg2rad(omega_c(114:end))); % A partie regime permanent
+y_ = abs(log(A_moy - deg2rad(omega_c(101:114)))./deg2rad(omega_c(101:114))); % 
+
+% Matrice coefficient C pour projection orthogonal
+i = 1;  
+for c = 101:114
+    A_coef(i, :) = [1, tsimu(c)]; 
+    i = i + 1;
+end
+A_lis = pinv(A_coef)*y_;
+lambda = A_lis(2); % Alpha = - Lambda
+t0 = A_lis (1)/lambda; % Beta = lambda * t0
+omega_c_lisse = A_moy ./ (1 + exp(-lambda*(tsimu-t0))); % repartir de la fonction sigmoide
+
 % X_entree1 (X1) = u(t)
 X1 = Vm;
 
@@ -8,14 +23,15 @@ X1 = Vm;
 %X2  = omega_c;
 % Sinon, on peut changer omega_c par la dérivée de servo
 % Donc prendre : X2 = diff(servo)./diff(tsimu);
-X2 = diff(servo)./diff(tsimu);
+X2 = omega_c_lisse;
 
 % Ordre 1, seulement une dérivée
-X = [X1(1:end-1) X2];
+X = [X1 X2];
 
 % Y = y(t) donc les valeur d'angle directement -> theta_c
-Y = servo(1:end-1); 
-                                    %----Méthode des moindres carrés----%
+Y = deg2rad(servo); % Mettre en rad
+
+%----Méthode des moindres carrés----%
 R = X' * X;
 P = X' * Y;
 
@@ -23,15 +39,15 @@ Rinv = inv(R);
 A = Rinv*P;
 
 K = A(1);
-tau = A(2); % Verifier le signe de Tau
+tau = -A(2); % Verifier le signe de Tau --> Équivalent a  :1 - alpha_sortie1 et comme A(2) négatif alors tau positif
 % Parti (d) 
 Jeq = 0.0017728; % unité : kg m^2 
-Rm = tau/Jeq; % unité : ohms 
+% Calculer Rm et Beq à partir de la fonction de transfert standard
 
-nm = 0.69;
-km = 0.0076776; % unité : Nm/A
-kt = 0.007683; % unité : V / (rad/s)
-Beq = (1-nm*km*kt)/Rm;
+
+
+
+
 
 %% SC-2 R^2 et erreur RMS
 % Fonction de transfert à partir de valeur de lissage par moindre carrés 
