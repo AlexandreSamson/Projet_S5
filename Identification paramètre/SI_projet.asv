@@ -22,13 +22,7 @@ Beq = 0.0056;
 
 % FT de Gcm(s) theta_c/Vm;
 
-numGcm = [Kg*ng*nm*kt]; % Kg*ng = N
-denGcm = [Rm*Jeq (Rm*Beq +nm*kt*km) 0];
-Gcm = tf(numGcm, denGcm);
-
-% Lieu des racines SI-1 (à garder en commentaire si pas utiliser)
-figure 
-rlocus(Gcm)
+num = [Kg*ng*nm*kt]
 
 
 
