@@ -20,10 +20,10 @@ L   = 0.4254;
 % Beq = 0.000539774; %A revoir    Beq = Bm+N^2*Bc
 N = ng*Kg;
 
-% %FTBO de la position (x) selon la tension en entree (Vm)
-% Gsm_num_SM_2   = [5*N*nm*kt*g*rarm];
-% Gsm_den_s3_SM_2 = 7*L*(nm*kt*km+Rm*Beq);
-% Gsm_den_s4_SM_2 = 7*L*Rm*Jeq;
+%FTBO de la position (x) selon la tension en entree (Vm)
+Gsm_num_SM_2   = [5*N*nm*kt*g*rarm];
+Gsm_den_s3_SM_2 = 7*L*(nm*kt*km+Rm*Beq);
+Gsm_den_s4_SM_2 = 7*L*Rm*Jeq;
 
 %% SM-2
 % Valeur pour Simulink - FTBO_Eq_diff_Vm_oc.slx
@@ -98,8 +98,7 @@ p_Gsm_SM_7 = roots(Gsm_den_SM_7); %poles de la FTBO
 
 tau = 0.3149;
 K = 2.7013;
-Beq = (1./tau)*(Jeq*((N*nm*kt)./K-nm*kt*km))./((N*nm*kt)./K);
-Rm = (1./Beq)*(N*kt*nm./K-nm*kt*km);
+Beq = (1./tau)*(Jeq*((N*nm*kt)./K))
 
 
 
