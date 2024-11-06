@@ -88,13 +88,6 @@ Gsm_SM_7 = tf(Gsm_num_SM_7, Gsm_den_SM_7);
 p_Gsm_SM_7 = roots(Gsm_den_SM_7); %poles de la FTBO
 
 
-%%
-% figure
-% plot(tsimu(1:end-1), omega_c)
-% hold on;
-% plot(tsimu, servo)
-% title('Graph des valeurs expérimentales')
-% xlabel('Temps (secondes)')
 
 tau = 0.3149;
 K = 2.7013;
