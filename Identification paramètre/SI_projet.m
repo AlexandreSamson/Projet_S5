@@ -18,7 +18,7 @@ L   = 0.4254;
 N = ng*Kg;
 % Valeur tirer de SC
 Rm = 2.16;
-Beq = 0.0959; 
+Beq = 0.0959;
 
 % FT de Gcm(s) theta_c/Vm;
 numGcm = [Kg*ng*nm*kt]; % Kg*ng = N
@@ -26,7 +26,7 @@ denGcm = [Rm*Jeq (Rm*Beq + nm*kt*km) 0];
 Gcm = tf(numGcm, denGcm);
 
 % Lieu des racines SI-1 (à garder en commentaire si pas utiliser)
-figure 
+figure(1) 
 rlocus(Gcm) 
 
 %SI-2 a)
@@ -39,7 +39,7 @@ ts_c = 4./(26.47); % valeur calculé papier
 
 
 %SI-2 d)
-Gcm_BF = feedback(Gcm,Kcrit);
+Gcm_BF = feedback(Gcm,Kcrit)
 denGcm_BF = [Gcm_BF.Denominator{1, 1}(1) Gcm_BF.Denominator{1, 1}(2) Gcm_BF.Denominator{1, 1}(3)]/Gcm_BF.Denominator{1, 1}(1);
 numGcm_BF = Gcm_BF.Numerator{1, 1}(3)/Gcm_BF.Denominator{1, 1}(1);
 
@@ -50,10 +50,15 @@ wn = sqrt(denGcm_BF(3));
 zeta = denGcm_BF(2)/(2*wn);
 ts_d = 4/wn*zeta;
 
+%SI-2 F)
+i = (Kcrit:0.1:100);
+p_ts_cst = rlocus(Gcm,i);
+phi = pi - angle(p_ts_cst(1,:));
+Mp = 100*exp(-pi./tan(phi));
 
-
-
-
-
-
+figure(2)
+plot(phi,Mp)
+title('MP-phi pour gain avec ts identique')
+xlabel('phi (rad)')
+ylabel('MP(%)')
 
