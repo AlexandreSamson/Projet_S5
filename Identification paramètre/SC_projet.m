@@ -60,8 +60,8 @@ R_squared = sum((ySim(1:end-1) - y_moy).^2)/(sum((deg2rad(omega_c) - y_moy).^2))
 
 %% SC-3 Reponse de la fct transfert Gcm(s) à l'échelon Vm et donnees experimentales 
 
-num = [(Kg*ng*nm*kt)./(Rm*Beq + nm*kt*km)];
-den = [(Rm*Jeq)./(Rm*Beq+nm*kt*km) 1];
+num = [(Kg*ng*nm*kt)./(Rm*Beq + nm*kt*km*Kg.^2*ng)];
+den = [(Rm*Jeq)./(Rm*Beq+nm*kt*km*Kg.^2*ng) 1];
 FT = tf(num, den); % des moindres carrés 
 [y_Gcm, x_Gcm] = lsim(FT, Vm,tsimu);
 
