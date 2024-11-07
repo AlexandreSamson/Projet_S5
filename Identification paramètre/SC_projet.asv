@@ -49,15 +49,15 @@ Rm = (1./Beq)*(N*kt*nm./K-nm*kt*km);
 num = [K];
 den = [tau 1];
 tfMC = tf(num, den);
-ySim = lsim(tfMC, Vm, tsimu);
+ySim = lsim(tfMC, Vm, Tsimu);
 
 
-E_squared = sum((ySim(1:end-1) - omega_c_rad).^2); 
+E_squared = sum((ySim - omega.^2); 
 N = length(tsimu);
 RMSE = sqrt(1/N*E_squared);
 
 y_moy = 1/N*sum(deg2rad(omega_c));
-R_squared = sum((ySim(1:end-1) - y_moy).^2)/(sum((deg2rad(omega_c) - y_moy).^2));
+R_squared = sum((omega_c_lisse(1:end-1) - y_moy).^2)/(sum((deg2rad(omega_c) - y_moy).^2));
 
 %% SC-3 Reponse de la fct transfert Gcm(s) à l'échelon Vm et donnees experimentales 
 
