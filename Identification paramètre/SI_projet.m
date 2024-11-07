@@ -25,6 +25,12 @@ numGcm = [Kg*ng*nm*kt]; % Kg*ng = N
 denGcm = [Rm*Jeq (Rm*Beq + nm*kt*km*(Kg.^2)*ng) 0];
 Gcm = tf(numGcm, denGcm);
 
+% Ft de Gcm(s) standard
+numGcm_st = [Kg*ng*nm*kt./(Rm*Jeq)];
+denGcm_st = [1 (Rm*Beq + nm*kt*km*(Kg.^2)*ng)./(Rm*Jeq) 0./(Rm*Jeq)];
+Gcm_st = tf(numGcm_st, denGcm_st);
+
+
 % Lieu des racines SI-1 (à garder en commentaire si pas utiliser)
 figure(1) 
 rlocus(Gcm) 
@@ -44,7 +50,6 @@ denGcm_BF = [Gcm_BF.Denominator{1, 1}(1) Gcm_BF.Denominator{1, 1}(2) Gcm_BF.Deno
 numGcm_BF = Gcm_BF.Numerator{1, 1}(3)/Gcm_BF.Denominator{1, 1}(1);
 
 tf_ = tf(numGcm_BF,denGcm_BF);
-
 
 wn = sqrt(denGcm_BF(3));
 zeta = denGcm_BF(2)/(2*wn);
