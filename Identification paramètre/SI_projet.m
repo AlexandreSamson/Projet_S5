@@ -17,8 +17,8 @@ rarm = 0.0254;
 L   = 0.4254;
 N = ng*Kg;
 % Valeur tirer de SC
-Rm = 2.16;
-Beq = 0.0959;
+Rm = 3.6267;
+Beq = 0.0073;
 
 % FT de Gcm(s) theta_c/Vm;
 numGcm = [Kg*ng*nm*kt]; % Kg*ng = N
