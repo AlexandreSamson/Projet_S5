@@ -17,36 +17,25 @@ rarm = 0.0254;
 L   = 0.4254;
 N = ng*Kg;
 % Valeur tirer de SC
-Rm = 21.9604;
-Beq = 0.0056; 
+Rm = 2.16;
+Beq = 0.0959; 
 
 % FT de Gcm(s) theta_c/Vm;
 numGcm = [Kg*ng*nm*kt]; % Kg*ng = N
-denGcm = [Rm*Jeq (Rm*Beq +nm*kt*km) 0]
-Gcm = tf(numGcm, denGcm)
-
+denGcm = [Rm*Jeq (Rm*Beq + nm*kt*km) 0];
+Gcm = tf(numGcm, denGcm);
 
 % Lieu des racines SI-1 (à garder en commentaire si pas utiliser)
 figure 
 rlocus(Gcm) 
 
-
-
 %SI-2 a)
-Kcrit = 0.291;
-
+Kcrit = 8.39;
 %SI-2 b)
-ts_b = 4/1.58 %Valeur 1.58 prix appartir du rlocus pour valeur Real pour ts constant
-
-%SI-2 c) *****A REVOIR VALEUR DE ts_c *********
-%Utiliser la regle de construction N5 pour avoir la valeur d'intersection
-%de l'asympote avec axe Reel ou N7 point de separation
-%N5
-p = roots(denGcm);
-ts_c = sum(p)/2
-
-%N7
-ts_c2 = -denGcm(2)/numGcm*2*denGcm(1)
+ts_b = 4/27.2; %Valeur 27 prix appartir du rlocus pour valeur Real pour ts constant
+%SI-2 c)
+% À partir de la règle 7 
+ts_c = 4./(26.47); % valeur calculé papier 
 
 
 %SI-2 d)
@@ -54,9 +43,12 @@ Gcm_BF = feedback(Gcm,Kcrit);
 denGcm_BF = [Gcm_BF.Denominator{1, 1}(1) Gcm_BF.Denominator{1, 1}(2) Gcm_BF.Denominator{1, 1}(3)]/Gcm_BF.Denominator{1, 1}(1);
 numGcm_BF = Gcm_BF.Numerator{1, 1}(3)/Gcm_BF.Denominator{1, 1}(1);
 
+tf_ = tf(numGcm_BF,denGcm_BF);
+
+
 wn = sqrt(denGcm_BF(3));
 zeta = denGcm_BF(2)/(2*wn);
-ts_d = 4/wn*zeta
+ts_d = 4/wn*zeta;
 
 
 

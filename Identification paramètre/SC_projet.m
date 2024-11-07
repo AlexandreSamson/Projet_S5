@@ -49,8 +49,7 @@ Rm = (1./Beq)*(N*kt*nm./K-nm*kt*km);
 num = [K];
 den = [tau 1];
 tfMC = tf(num, den);
-ySim = lsim(tfMC, Vm, tsimu);
-
+ySim = lsim(tfMC, Vm, tsimu); % systeme obtenu analytiquement
 
 E_squared = sum((ySim(1:end-1) - omega_c_rad).^2); 
 N = length(tsimu);
