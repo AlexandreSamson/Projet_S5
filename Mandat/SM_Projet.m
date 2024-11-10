@@ -1,6 +1,8 @@
 clc; close all; clear all;
 load("data_1v_4-09_100hz.mat", "Vm", "servo", "omega_c", "tsimu");
 
+% TO DO 
+% Simplifier la manière de construire les FT
 
 %Variables
 ms  = 0.064;

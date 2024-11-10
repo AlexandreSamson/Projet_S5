@@ -96,4 +96,38 @@ margin(Gcm)
 PM_Calc = atand((2*zeta)/(sqrt(sqrt(1+4*zeta.^4)-2*zeta.^2)))
 
 %SI-7
+kbb = 5*g*rarm/(L*7);
+coefA = -(Jeq*km*Kg*kt*nm+Beq*Rm)/(Rm*Jeq);
+A = [0 1 0 0;
+    0 0 kbb 0;
+    0 0 0 1;
+    0 0 0 coefA];
+B = [0 0 0 (nm*kt/Rm)]';
+C = [1 0 0 0;
+    0 0 1 0];
+D = [0 0]';
+
+
+Aint = [A(:,1) A(:,2) A(:,3)-B*Kint_Calc A(:,4)];
+Bint = B*Kint_Calc;
+Cint = C;
+Dint = D;
+
+
+vp_Aint = eig(Aint)
+
+
+%SI-8
+[numInt, denInt] = ss2tf(Aint,Bint,Cint,Dint,1);
+Gsm_int = tf(numInt(1,:),denInt);
+Gcm_int = tf(numInt(2,:),denInt);
+
+poles_FT_int = roots(denInt) % Valeur propre et poles des FT sont identiques
+
+%SI-9 
+%La FT Gsm_int est classe 2 et la FT Gsm etait classe 1
+
+%SI-10
+figure()
+rlocus(Gsm_int)
 
