@@ -73,7 +73,7 @@ Kint_Rac = 7.72; % trouver avec rlocus à damping = 0.8
 zeta = 0.8;
 
 
-Kint_Calc = ((Beq*Rm+nm*kt*Kg*Kg*ng*km)/(Rm*Jeq*2*zeta)).^2 * (Rm*Jeq)/(nm*kt*Kg*ng)
+Kint_Calc = ((Beq*Rm+nm*kt*Kg*Kg*ng*km)/(Rm*Jeq*2*zeta)).^2 * (Rm*Jeq)/(nm*kt*Kg*ng);
 Gcm_BF = feedback(Gcm*Kint_Calc,1); %Visualiser la FT
 
 % SI-4
@@ -82,7 +82,9 @@ poles_BF = roots(Gcm_BF.Denominator{1, 1});
 figure(3) 
 rlocus(Gcm)
 hold on
-plot(real(poles_BF),imag(poles_BF),'s')
+plot(real(poles_BF),  imag(poles_BF),'s')
+hold on
+plot(real(poles_BF), -imag(poles_BF),'s')
 
 % SI-5
 figure()
@@ -93,7 +95,7 @@ margin(Gcm)
 [GM,PM,wg,wp] = margin(Gcm);
 
 %zeta_Calc = 0.5*sqrt(tand(PM)*sind(PM))
-PM_Calc = atand((2*zeta)/(sqrt(sqrt(1+4*zeta.^4)-2*zeta.^2)))
+PM_Calc = atand((2*zeta)/(sqrt(sqrt(1+4*zeta.^4)-2*zeta.^2)));
 
 %SI-7
 kbb = 5*g*rarm/(L*7);
@@ -107,22 +109,19 @@ C = [1 0 0 0;
     0 0 1 0];
 D = [0 0]';
 
-
 Aint = [A(:,1) A(:,2) A(:,3)-B*Kint_Calc A(:,4)];
 Bint = B*Kint_Calc;
 Cint = C;
 Dint = D;
 
-
-vp_Aint = eig(Aint)
-
+vp_Aint = eig(Aint);
 
 %SI-8
 [numInt, denInt] = ss2tf(Aint,Bint,Cint,Dint,1);
 Gsm_int = tf(numInt(1,:),denInt);
 Gcm_int = tf(numInt(2,:),denInt);
 
-poles_FT_int = roots(denInt) % Valeur propre et poles des FT sont identiques
+poles_FT_int = roots(denInt); % Valeur propre et poles des FT sont identiques
 
 %SI-9 
 %La FT Gsm_int est classe 2 et la FT Gsm etait classe 1
@@ -130,4 +129,6 @@ poles_FT_int = roots(denInt) % Valeur propre et poles des FT sont identiques
 %SI-10
 figure()
 rlocus(Gsm_int)
+
+close all;
 

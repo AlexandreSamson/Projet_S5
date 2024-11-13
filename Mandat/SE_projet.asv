@@ -30,14 +30,18 @@ denGsm = [1,4.11856536591719,0.0112805289604377,0,0];
 Gsm = tf(numGsm, denGsm);
 
 % Lieu des racines pour voir si un gain K peut ajuster (garder commenter)
-figure
-rlocus(Gsm)
-hold on;
-plot(real(s_des), imag(s_des),'p');
-hold on;
-plot(real(s_des), -imag(s_des),'s')
-title('Lieu des racines de la G_s_m')
+% figure
+% rlocus(Gsm)
+% hold on;
+% plot(real(s_des), imag(s_des),'p');
+% hold on;
+% plot(real(s_des), -imag(s_des),'p')
+% title('Lieu des racines de la G_s_m')
+% CTRL + MAJ + R enleve les commentaires
 % UN GAIN K NE COMPENSE PAS 
+
+
+
 
 
 
