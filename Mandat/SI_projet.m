@@ -1,5 +1,5 @@
 %% SI Conception de la boucle interne 
-clear all; clc;close all;
+%clear all; clc;close all;
 load("data_1v_4-09_100hz.mat", "Vm", "servo", "omega_c", "tsimu");
 %Variables
 ms  = 0.064;
