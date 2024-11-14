@@ -78,9 +78,45 @@ rlocus(Gsm)
 hold on;
 plot(real(s_des), imag(s_des),'p');
 hold on;
-plot(real(s_des), -imag(s_des),'s')
+plot(real(s_des), -imag(s_des),'p')
 title('Lieu des racines de la G_s_m')
+% CTRL + MAJ + R enleve les commentaires
 % UN GAIN K NE COMPENSE PAS 
+
+pol = polyval(denGsm, s_des);
+ph = -rad2deg((pi+angle(pol))); 
+dphi = -180 - ph; 
+
+alpha = 180 - rad2deg(phi);
+zphi = (alpha + dphi)./2;
+pphi = (alpha - dphi)./2;
+
+z = real(s_des) - imag(s_des)./tand(zphi);
+p = real(s_des) - imag(s_des)./tand(pphi);
+
+Ka = 1./abs(((s_des - z)./(s_des - p))*polyval(numGsm, s_des)./polyval(denGsm,s_des));
+
+% Fonction de transfert Compensateur AvPh
+numGa = Ka*[1 -z];
+denGa = [1 -p];
+ftGa = tf(numGa, denGa);
+
+% Fonction de transfert Gsm(s) * Ga(s)
+ftGext = Gsm * ftGa;
+
+% Lieu des racines avant tune
+figure
+rlocus(ftGext)
+hold on;
+plot(real(s_des), imag(s_des),'p');
+hold on;
+plot(real(s_des), -imag(s_des),'p')
+title('Lieu des racines de la G_s_m(s)*G_a(s)')
+
+
+
+
+
 
 
 
