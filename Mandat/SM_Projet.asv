@@ -25,9 +25,9 @@ N = ng*Kg;
 
 
 %% SM-2
-% Valeur pour Simulink - FTBO_Eq_diff_Vm_oc.slx - GOOD
+% Valeur pour Simulink - FTBO_Eq_diff_Vm_oc.slx
 kbb = 5*g*rarm/(L*7);
-Eq_diff_coeff_oc = ((Beq*Rm)+nm*kt*km*Kg.^2*ng)/(Rm*Jeq);
+Eq_diff_coeff_oc = ((Beq*Rm)+nm*kt*km*Kg.^2*ng)/(Rm*(Jeq));
 Eq_diff_coeff_Vm = (nm*kt*Kg*ng)/(Jeq*Rm);
 
 %% SM-3
@@ -79,7 +79,7 @@ p_Gsc_SM_6 = roots(Gsc_den_SM_6); %poles de la FTBO
 
 %% SM-7
 % FTBO de la tension en entrée (Vm) et de la position de la charge en
-% sortie (x) et utilise les valeurs FT dans FTBO_Vm_oc - GOOD
+% sortie (x) et utilise les valeurs FT dans FTBO_Vm_oc
 Gsm_num_SM_7 = 5*g*rarm*nm*kt*Kg*ng;
 Gsm_den_SM_7 = [Rm*Jeq*7*L (Rm*Beq+nm*kt*km*Kg.^2*ng)*7*L 0 0];
 Gsm_SM_7 = tf(Gsm_num_SM_7, Gsm_den_SM_7);
