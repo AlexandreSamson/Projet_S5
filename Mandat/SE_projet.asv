@@ -73,13 +73,13 @@ denGsm = [1 32.04 400.9 0 0];
 Gsm = tf(numGsm, denGsm);
 
 % % Lieu des racines pour voir si un gain K peut ajuster (garder commenter)
-figure
-rlocus(Gsm)
-hold on;
-plot(real(s_des), imag(s_des),'p');
-hold on;
-plot(real(s_des), -imag(s_des),'p')
-title('Lieu des racines de la G_s_m')
+% figure
+% rlocus(Gsm)
+% hold on;
+% plot(real(s_des), imag(s_des),'p');
+% hold on;
+% plot(real(s_des), -imag(s_des),'p')
+% title('Lieu des racines de la G_s_m')
 % CTRL + MAJ + R enleve les commentaires
 % UN GAIN K NE COMPENSE PAS 
 
@@ -105,13 +105,13 @@ ftGa = tf(numGa, denGa);
 ftGext = Gsm * ftGa;
 
 % Lieu des racines avant tune
-figure
-rlocus(ftGext)
-hold on;
-plot(real(s_des), imag(s_des),'p');
-hold on;
-plot(real(s_des), -imag(s_des),'p')
-title('Lieu des racines de la G_s_m(s)*G_a(s)')
+% figure
+% rlocus(ftGext)
+% hold on;
+% plot(real(s_des), imag(s_des),'p');
+% hold on;
+% plot(real(s_des), -imag(s_des),'p')
+% title('Lieu des racines de la G_s_m(s)*G_a(s)')
 
 
 % critères de performances finales 
