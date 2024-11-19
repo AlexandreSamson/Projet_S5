@@ -87,14 +87,8 @@ Gsm_SM_7 = tf(Gsm_num_SM_7, Gsm_den_SM_7);
 p_Gsm_SM_7 = roots(Gsm_den_SM_7); %poles de la FTBO
 
 
-% Rajouter un titre ici svp
-tau = 0.3149;
-K = 2.7013;
 
 
-% WHAT IS THIS?
-%Beq = (1./tau)*(Jeq*((N*nm*kt)./K-nm*kt*km))./((N*nm*kt)./K);
-%Rm = (1./Beq)*(N*kt*nm./K-nm*kt*km);
 
 
 

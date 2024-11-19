@@ -95,12 +95,12 @@ margin(Gcm)
 title('Diagramme de Bode de G_c_m')
 
 % SI-6
-[GM,PM,wg,wp] = margin(Gcm);
+[GM,PM,wg,wp] = margin(Gcm*Kint_Calc);
 
 zeta_Calc = 0.5*sqrt(tand(PM)*sind(PM));
 PM_Calc = atand((2*zeta)/(sqrt(sqrt(1+4*zeta.^4)-2*zeta.^2)));
 
-%SI-7 % A REVOIR
+%SI-7 
 kbb = 5*g*rarm/(L*7);
 coefA =  -(Rm*Beq+nm*kt*km*Kg.^2*ng)/(Rm*Jeq);
 A = [0 1 0 0;
@@ -127,7 +127,7 @@ Gcm_int = tf(numInt(2,:),denInt);
 poles_FT_int = roots(denInt); % Valeur propre et poles des FT sont identiques
 
 %SI-9 
-%La FT Gsm_int est classe 2 et la FT Gsm etait classe 1
+%La FT Gsm_int est classe 2 et la FT Gsm etait classe 3
 
 %SI-10
 figure()
