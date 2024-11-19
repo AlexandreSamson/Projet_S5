@@ -33,8 +33,9 @@ Gcm_st = tf(numGcm_st, denGcm_st);
 
 
 % % Lieu des racines SI-1 (à garder en commentaire si pas utiliser)
-% figure(1) 
-% rlocus(Gcm) 
+figure(1) 
+rlocus(Gcm) 
+title('Lieu des racines de la fonction G_c_m')
 
 %SI-2 a)
 Kcrit = 4.94;
@@ -129,6 +130,7 @@ poles_FT_int = roots(denInt); % Valeur propre et poles des FT sont identiques
 %SI-10
 figure()
 rlocus(Gsm_int)
+title('Lieu des racines de la G_s_m de la boucle interne')
 % 
 % close all;
 

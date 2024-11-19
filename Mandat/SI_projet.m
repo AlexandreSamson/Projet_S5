@@ -1,5 +1,5 @@
 %% SI Conception de la boucle interne 
-%clear all; clc;close all;
+clear all; clc;close all;
 load("data_1v_4-09_100hz.mat", "Vm", "servo", "omega_c", "tsimu");
 %Variables
 ms  = 0.064;
@@ -33,8 +33,9 @@ Gcm_st = tf(numGcm_st, denGcm_st);
 
 
 % % Lieu des racines SI-1 (à garder en commentaire si pas utiliser)
-% figure(1) 
-% rlocus(Gcm) 
+figure(1) 
+rlocus(Gcm) 
+title('Lieu des racines de la fonction G_c_m')
 
 %SI-2 a)
 Kcrit = 4.94;
@@ -46,7 +47,7 @@ ts_c = 4./(16.019); % valeur calculé papier
 
 
 %SI-2 d)
-Gcm_BF = feedback(Gcm,Kcrit);
+Gcm_BF = feedback(Kcrit*Gcm,1);
 denGcm_BF = [Gcm_BF.Denominator{1, 1}(1) Gcm_BF.Denominator{1, 1}(2) Gcm_BF.Denominator{1, 1}(3)]/Gcm_BF.Denominator{1, 1}(1);
 numGcm_BF = Gcm_BF.Numerator{1, 1}(3)/Gcm_BF.Denominator{1, 1}(1);
 
@@ -82,14 +83,16 @@ poles_BF = roots(Gcm_BF.Denominator{1, 1});
 figure(3) 
 rlocus(Gcm)
 hold on
-plot(real(poles_BF),  imag(poles_BF),'s')
+plot(real(poles_BF),  imag(poles_BF),'Diamond','Color','r')
 hold on
-plot(real(poles_BF), -imag(poles_BF),'s')
+plot(real(poles_BF), -imag(poles_BF),'Diamond','Color','r')
+title('Lieu des racines de la fonction G_c_m')
+legend('G_c_m','Pôles désirés')
 
 % SI-5
 figure()
 margin(Gcm)
-
+title('Diagramme de Bode de G_c_m')
 
 % SI-6
 [GM,PM,wg,wp] = margin(Gcm);
@@ -129,6 +132,7 @@ poles_FT_int = roots(denInt); % Valeur propre et poles des FT sont identiques
 %SI-10
 figure()
 rlocus(Gsm_int)
+title('Lieu des racines de la G_s_m de la boucle interne')
 % 
 % close all;
 
