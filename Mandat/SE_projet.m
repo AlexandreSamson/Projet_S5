@@ -122,6 +122,106 @@ info = stepinfo(feedback(ftGext,1))
 
 %%%%%%%%%%%%%%% Temporelle section en haut 
 
+%%%% Frequentielle %%%%
+% Définition de PM et BW
+PM = deg2rad(45);  
+BW = 2.3;          
+err = 0.005;       
+
+% Calcul du coefficient d'amortissement zeta basé sur la marge de phase
+zeta = 0.5 * sqrt(tan(PM) * sin(PM))
+
+% Calcul du numérateur et du dénominateur pour la fréquence à laquelle la marge est mesurée
+wgNum = sqrt(sqrt(1 + 4 * zeta^4) - (2 * zeta^2));
+wgDen = sqrt((1 - 2 * zeta^2) + sqrt(4 * zeta^4 - 4 * zeta^2 + 2));
+wg = BW * (wgNum / wgDen) + 0.96;  % Fréquence de croisement de la bande passante
+
+
+% Calcul du gain requis pour obtenir la bande passante désirée
+[mag, phase] = bode(Gsm, wg);  
+Kdes = 1 / mag               
+
+% Création d'une nouvelle fonction de transfert avec le gain correctif
+Gs2 = series(Kdes, Gsm)
+
+% Récupération des marges de gain et de phase pour la fonction corrigée
+[GM2, PM2, wp2, wg2] = margin(Gs2);
+
+% Calcul de la marge de phase souhaitée en degrés
+PMdes = rad2deg(PM);
+
+% Calcul du déphasage nécessaire pour atteindre la marge de phase désirée
+deltaPhi = PMdes - PM2 + 5 - 2.8;
+
+% Calcul de alpha pour le correcteur d'avance de phase
+alpha = (1 - sind(deltaPhi)) / (1 + sind(deltaPhi))
+
+% Calcul du paramètre T du correcteur d'avance de phase
+T = 1 / (wg * sqrt(alpha))
+z = -1 / T
+p = -1 / (alpha * T)  
+
+% Calcul du gain du correcteur d'avance de phase
+Ka = (Kdes / sqrt(alpha)) * 1.21;
+
+% Définition des coefficients du numérateur et du dénominateur du correcteur
+numAvPh = Ka * [1 1/T];
+denAvPh = [1 1 /(alpha*T)];
+
+% Création de la fonction de transfert du correcteur d'avance de phase
+FTAvPh = tf(numAvPh, denAvPh)
+
+% Création de la fonction de transfert totale (système corrigé)
+FTAvPhtot = series(FTAvPh, Gsm)
+
+figure;
+margin(FTAvPhtot)
+
+FTBF_freq = feedback(FTAvPhtot,1)
+
+
+figure % Cas de la réponse à l’échelon 
+t = [1:0.01:20]';
+u = ones(size(t));  % Échelon unitaire 
+% ou FTBF = feedback(FTBO,1) 
+ybf = lsim(FTBF_freq,u,t); 
+plot(t,ybf,'b', 'linewidth', 2) 
+grid on 
+hold on 
+plot([t(1); t(end)], 0.98*ybf(end)*[1;1], 'r', 'linewidth', 2) 
+plot([t(1); t(end)], 1.02*ybf(end)*[1;1], 'r', 'linewidth', 2) 
+
+
+% Définir la valeur de stabilisation finale
+y_final = ybf(end);
+
+% Calcul des limites de 2%
+lim_sup = 1.02 * y_final;
+lim_inf = 0.98 * y_final;
+
+% Déterminer le temps où la réponse reste dans les limites
+idx_stable = find(ybf >= lim_inf & ybf <= lim_sup);
+
+% Vérifier à partir de quel indice la réponse reste stable
+
+for i = 1:length(idx_stable)
+    if all(ybf(idx_stable(i):end) >= lim_inf & ybf(idx_stable(i):end) <= lim_sup)
+        t_stab = t(idx_stable(i)); 
+        break;
+    end
+end
+
+
+% Affichage du temps de stabilisation
+fprintf('Ts (2%%) : %.2f secondes\n', t_stab);
+
+% Ajout d'une ligne verticale sur le graphique
+if ~isnan(t_stab)
+    hold on;
+    plot([t_stab, t_stab], [0, y_final], '--g', 'LineWidth', 2);
+end
+
+BW = bandwidth(FTBF_freq)
 
 
 
