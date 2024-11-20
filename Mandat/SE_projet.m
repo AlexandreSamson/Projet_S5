@@ -134,7 +134,7 @@ zeta = 0.5 * sqrt(tan(PM) * sin(PM))
 % Calcul du numérateur et du dénominateur pour la fréquence à laquelle la marge est mesurée
 wgNum = sqrt(sqrt(1 + 4 * zeta^4) - (2 * zeta^2));
 wgDen = sqrt((1 - 2 * zeta^2) + sqrt(4 * zeta^4 - 4 * zeta^2 + 2));
-wg = BW * (wgNum / wgDen) + 0.96;  % Fréquence de croisement de la bande passante
+wg = BW * (wgNum / wgDen) %+ 0.96;  % Fréquence de croisement de la bande passante
 
 
 % Calcul du gain requis pour obtenir la bande passante désirée
@@ -151,7 +151,7 @@ Gs2 = series(Kdes, Gsm)
 PMdes = rad2deg(PM);
 
 % Calcul du déphasage nécessaire pour atteindre la marge de phase désirée
-deltaPhi = PMdes - PM2 + 5 - 2.8;
+deltaPhi = PMdes - PM2 + 5 %- 2.8;
 
 % Calcul de alpha pour le correcteur d'avance de phase
 alpha = (1 - sind(deltaPhi)) / (1 + sind(deltaPhi))
@@ -162,7 +162,7 @@ z = -1 / T
 p = -1 / (alpha * T)  
 
 % Calcul du gain du correcteur d'avance de phase
-Ka = (Kdes / sqrt(alpha)) * 1.21;
+Ka = (Kdes / sqrt(alpha)) %* 1.21
 
 % Définition des coefficients du numérateur et du dénominateur du correcteur
 numAvPh = Ka * [1 1/T];
@@ -190,6 +190,11 @@ grid on
 hold on 
 plot([t(1); t(end)], 0.98*ybf(end)*[1;1], 'r', 'linewidth', 2) 
 plot([t(1); t(end)], 1.02*ybf(end)*[1;1], 'r', 'linewidth', 2) 
+
+figure;
+u2 = 6*ones(size(t));
+ybf2 = lsim(FTBF_freq,u2,t); 
+plot(t,ybf2,'b', 'linewidth', 2) 
 
 
 % Définir la valeur de stabilisation finale
@@ -222,7 +227,6 @@ if ~isnan(t_stab)
 end
 
 BW = bandwidth(FTBF_freq)
-
 
 
 
