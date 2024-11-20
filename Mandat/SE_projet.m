@@ -45,7 +45,7 @@ plot(t, 1.02*y_lin_ech(end)*[1:1], 'r--', 'linewidth', 2);
 % Compensateur se fait sur la Gsm_int de SI (p.11 specs)
 clear all; clc;close all;
 load("data_1v_4-09_100hz.mat", "Vm", "servo", "omega_c", "tsimu");
-SI_projet;
+%SI_projet;
 % conception par les critères du domaine temporel (lieu des racines)
 % critères de performance lors de la conception initiale
 Mp_ini = 5;
@@ -68,24 +68,24 @@ wn = max([wn_ts wn_tr wn_tp]); % omega maximum calculé ici
 s_des = -zeta*wn + 1i*(wn*sqrt(1-zeta.^2));
 
 % fonction de transfert Gsm_int pris de SI_projet
-numGsm = [167.7];
-denGsm = [1 32.04 400.9 0 0];
+numGsm = [167.7210];
+denGsm = [1 32.04 400.9 0 0]; % s^4 + s^3...
 Gsm = tf(numGsm, denGsm);
 
 % % Lieu des racines pour voir si un gain K peut ajuster (garder commenter)
-figure
-rlocus(Gsm)
-hold on;
-plot(real(s_des), imag(s_des),'p');
-hold on;
-plot(real(s_des), -imag(s_des),'p')
-title('Lieu des racines de la G_s_m')
+% figure
+% rlocus(Gsm)
+% hold on;
+% plot(real(s_des), imag(s_des),'p');
+% hold on;
+% plot(real(s_des), -imag(s_des),'p')
+% title('Lieu des racines de la G_s_m')
 % CTRL + MAJ + R enleve les commentaires
 % UN GAIN K NE COMPENSE PAS 
 
 pol = polyval(denGsm, s_des);
 ph = -rad2deg((2*pi+angle(pol))); 
-dphi = -180 - ph + 7.6; 
+dphi = -180 - ph; % + 7,6
 
 alpha = 180 - rad2deg(phi);
 zphi = (alpha + dphi)./2;
@@ -97,7 +97,7 @@ p = real(s_des) - imag(s_des)./tand(pphi);
 Ka = 1./abs(((s_des - z)./(s_des - p))*polyval(numGsm, s_des)./polyval(denGsm,s_des));
 
 % Fonction de transfert Compensateur AvPh
-numGa = 1.19*Ka*[1 -z];
+numGa = Ka*[1 -z]; % fois 1.19
 denGa = [1 -p];
 ftGa = tf(numGa, denGa);
 
@@ -122,7 +122,7 @@ info = stepinfo(feedback(ftGext,1))
 
 %%%%%%%%%%%%%%% Temporelle section en haut 
 
-%%%% Frequentielle %%%%
+%% %% Frequentielle %%%%
 % Définition de PM et BW
 PM = deg2rad(45);  
 BW = 2.3;          
