@@ -9,7 +9,7 @@ flag_in = 0;
 %t = [0:0.01:10];
 
 
-out = sim('SE_1');
+out = sim('..\SimuLink\SE_1');
 t = [out.x_sphere.Time];
 u = ones(size(t));
 
