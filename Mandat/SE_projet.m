@@ -4,7 +4,7 @@ SM_Projet;
 SI_projet;
 
 
-flag_in = 0;
+flag_in = 1;
 
 %t = [0:0.01:10];
 
@@ -32,15 +32,23 @@ y_lin_ech = lsim(Gsm_int_BF, u, t);
 
 figure()
 plot(t, y_lin_ech)
+hold on
 plot(t, out.x_sphere.Data)
 title('Réponse à l échelon du système')
 xlabel('temps (s)')
 ylabel('Position (m)')
 legend('Linéaire', 'Non-Linéaire')
-grid on
-hold on
-plot(t, 0.98*y_lin_ech(end)*[1:1], 'r--', 'linewidth', 2);
-plot(t, 1.02*y_lin_ech(end)*[1:1], 'r--', 'linewidth', 2);
+%plot(t, 0.98*y_lin_ech(end)*[1:1], 'r--', 'linewidth', 2);
+%plot(t, 1.02*y_lin_ech(end)*[1:1], 'r--', 'linewidth', 2);
+
+%Erreur_lin_nlin = y_lin_ech-out.x_sphere;
+%figure()
+%plot(t, (Erreur_lin_nlin)
+%title('Erreur entre Simulink (non-lin) et lsim (lin)')
+
+
+
+
 %% SE - compensateur boucle externe
 % Compensateur se fait sur la Gsm_int de SI (p.11 specs)
 clear all; clc;close all;
